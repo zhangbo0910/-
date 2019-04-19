@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        #ul1{
+            width:660px;
+            position: relative;
+            margin: 10px auto;
+        }
+        #ul1>li{
+            width:200px;
+            height:150px;
+            margin: 10px;
+            float: left;
+            list-style: none;
+        }
+        #ul1>li>img{
+            width:200px;
+            height:150px;
+        }
+    </style>
+</head>
+<body>
+<ul id="ul1">
+    <li><img src="img/1.jpg" alt=""></li>
+    <li><img src="img/2.jpg" alt=""></li>
+    <li><img src="img/3.jpg" alt=""></li>
+    <li><img src="img/4.jpg" alt=""></li>
+    <li><img src="img/5.jpg" alt=""></li>
+    <li><img src="img/6.jpg" alt=""></li>
+    <li><img src="img/7.jpg" alt=""></li>
+    <li><img src="img/8.jpg" alt=""></li>
+    <li><img src="img/9.jpg" alt=""></li>
+</ul>
+<script>
+    var ali=document.getElementsByTagName("li");
+    var arr=[];
+    var izindex=2;
+    for (var i=0;i<ali.length;i++){
+        arr.push([ali[i].offsetLeft,ali[i].offsetTop]);
+    }
+    for (var i=0;i<ali.length;i++){
+        ali[i].style.position="absolute";
+        ali[i].style.left=arr[i][0]+"px";
+        ali[i].style.top=arr[i][1]+"px";
+        ali[i].style.margin=0;
+    }
+    for (var i=0;i<ali.length;i++){
+        drag(ali[i]);
+    }
+    function drag(obg) {
+        var disX=0;
+        var disY=0;
+        obg.onmousedown=function (ev) {
+            obg.style.zIndex=izindex++;
+            var ev=ev || window.event;
+            disX=ev.clientX-obg.offsetLeft;
+            disY=ev.clientY-obg.offsetTop;
+            document.onmousemove=function (ev) {
+                var ev=ev || window.event;
+                obg.style.left=ev.clientX-disX+"px";
+                obg.style.top=ev.clientY-disY+"px";
+                for (var i=0;i<ali.length;i++){
+                    if (pz(obg,ali[i] )&& obg!==ali[i]){
+                        ali[i].style.border="2px solid red";
+                    }else {
+                        ali[i].style.border="";
+                    }
+                }
+            };
+            document.onmouseup=function (ev) {
+                document.onmousemove=null;
+               document.onmouseup=null;
+            };
+            return false;
+        }
+    }
+    function pz(obg1,obg2) {
+        var L1=obg1.offsetLeft;
+        var R1=obg1.offsetLeft+obg1.offsetWidth;
+        var T1=obg1.offsetTop;
+        var B1=obg1.offsetTop+obg1.offsetHeight;
+        var L2=obg2.offsetLeft;
+        var R2=obg2.offsetLeft+obg2.offsetWidth;
+        var T2=obg2.offsetTop;
+        var B2=obg2.offsetTop+obg2.offsetHeight;
+        if (R1<L2 || L1<R2 || B1<T2 || T1>B2){
+            return false;
+        } else {
+            return true;
+        }
+    }
+</script>
+</body>
+</html>
